@@ -390,6 +390,13 @@ module Qless
       first('pre', text: /what-what/im).should be
     end
 
+    it 'can visit the page for a job with data that looks like xss injection' do
+      jid = q.put(Qless::Job, { script: '<script>alert(1)</script>' })
+      visit "/jobs/#{jid}"
+      # Make sure we see script tags in data
+      first('pre', text: /"script"\s*:\s*"<script>alert\(1\)<\/script>"/im).should be
+    end
+
     it 'can visit the failed page' do
       # We should make sure that we see all the groups of failures that
       # we expect, as well as all the jobs we'd expect. This includes the

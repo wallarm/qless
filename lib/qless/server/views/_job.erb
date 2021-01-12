@@ -110,7 +110,7 @@
 	    <div class="row">
 	      <div class="span6">
 	        <h3><small>Data</small></h3>
-	        <pre style="overflow-y:scroll; height: 200px"><%= JSON.pretty_generate(job.data) %></pre>
+	        <pre style="overflow-y:scroll; height: 200px"><%= h JSON.pretty_generate(job.data) %></pre>
 	      </div>
 	      <div class="span6">
 	        <h3><small>History</small></h3>
@@ -227,7 +227,7 @@
 	    <div class="row">
 	      <div class="span12">
 	        <h3><small>Data</small></h3>
-	        <pre style="overflow-y:scroll; height: 200px"><%= JSON.pretty_generate(job.data) %></pre>
+	        <pre style="overflow-y:scroll; height: 200px"><%= h JSON.pretty_generate(job.data) %></pre>
 	      </div>
 	    </div>
 	    <% end %>

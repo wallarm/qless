@@ -152,6 +152,11 @@ module Qless
           formatted
         end
       end
+
+      # According to http://sinatrarb.com/faq.html#escape_html
+      def h(text)
+        Rack::Utils.escape_html(text)
+      end
     end
 
     get '/?' do
