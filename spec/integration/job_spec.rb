@@ -2,6 +2,7 @@
 
 # The things we're testing
 require 'qless'
+require 'support/forking_worker_context'
 
 # Spec stuff
 require 'spec_helper'
@@ -191,6 +192,40 @@ module Qless
       job = client.jobs['jid']
       expect(job.state).to eq('failed')
       expect(job.failure['group']).to eq('foo-method-missing')
+    end
+
+    context 'when job queued after error' do
+      include_context "forking worker"
+
+      it 'saves error message' do
+        job_class = Class.new do
+          def self.perform(job)
+            raise StandardError, "some error"
+          end
+        end
+        stub_const('JobClass', job_class)
+
+        client.config['grace-period'] = 0
+        client.config['heartbeat'] = 1
+
+        queue.put('JobClass', { redis: redis._client.id },
+                  retries: 0, jid: 'jid')
+
+        drain_worker_queues(worker)
+
+        job = client.jobs['jid']
+        expect(job.failure['message']).to include('some error')
+        job.requeue(job.queue.name)
+
+        queue.pop
+        sleep 2
+        # invalidate job
+        queue.pop
+
+        job = client.jobs['jid']
+        expect(job.failure['message']).to include('some error')
+        expect(job.failure['message']).to include('Job exhausted retries in queue "main"')
+      end
     end
 
     it 'raises an error if it cannot find the class' do
