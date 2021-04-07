@@ -126,7 +126,7 @@ module Qless
             load "qless/middleware/memory_usage_monitor.rb"
 
             unless Process.respond_to?(:rusage)
-              pending "Could not load the rusage gem"
+              skip "Could not load the rusage gem"
             end
           end
         end

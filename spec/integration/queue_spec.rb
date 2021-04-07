@@ -16,7 +16,7 @@ module Qless
         expect(queue.jobs.send(cmd)).to eq([])
       end
     end
-    
+
     it 'provides access to job counts' do
       queue.put('Foo', {})
       expect(queue.counts).to eq({
@@ -97,7 +97,7 @@ module Qless
     end
 
     it 'can optionally stop all running jobs when pausing' do
-      pending('this is specific to ruby')
+      skip('this is specific to ruby')
     end
 
     it 'exposes max concurrency' do
