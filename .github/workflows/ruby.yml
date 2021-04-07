@@ -42,4 +42,5 @@ jobs:
         env:
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
           SKIP_JS_SPEC: true
+          SKIP_NOT_CORE: true
         run: bundle exec rspec
