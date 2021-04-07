@@ -38,16 +38,16 @@ module RedisHelpers
   extend self
 
   def redis_config
-    return @redis_config unless @redis_config.nil?
-    if File.exist?('./spec/redis.config.yml')
-      @redis_config = YAML.load_file('./spec/redis.config.yml')
-    else
-      @redis_config = {}
-    end
+    return @redis_config if defined?(@redis_config)
+
+    @redis_config = {
+      host: ENV.fetch('REDIS_HOST', 'localhost'),
+      port: Integer(ENV.fetch('REDIS_PORT', '6379')),
+      db: Integer(ENV.fetch('REDIS_DB', '0'))
+    }
   end
 
   def redis_url
-    return 'redis://localhost:6379/0' if redis_config.empty?
     c = redis_config
     "redis://#{c[:host]}:#{c[:port]}/#{c.fetch(:db, 0)}"
   end
