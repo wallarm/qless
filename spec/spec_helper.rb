@@ -75,7 +75,7 @@ RSpec.configure do |c|
 
   c.before(:each, :js) do
     pending 'Skipping JS test because JS tests have been flaky on Travis.'
-  end if ENV['TRAVIS']
+  end if ENV['SKIP_JS_SPEC']
 end
 
 using_integration_context = false
