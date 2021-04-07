@@ -24,7 +24,6 @@ jobs:
     services:
       redis:
         image: redis:${{ matrix.redis-version }}
-        # Map TCP port 6379 on Docker host to a random free port on the Redis container
         ports:
           - 6379/tcp
 
