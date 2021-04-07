@@ -34,12 +34,12 @@ module Qless
             end
           end
         end
-      end.tap { |t| t.join(0.01) }
+      end.tap { |t| t.join(0.1) }
     end
 
     # Wait until all the threads have sent their events
     def jids_for_event(event)
-      thread.join(0.1)
+      thread.join(0.3)
       events[event]
     end
 
