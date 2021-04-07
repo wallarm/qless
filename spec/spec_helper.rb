@@ -74,7 +74,7 @@ RSpec.configure do |c|
   c.include QlessSpecHelpers
 
   c.before(:each, :js) do
-    pending 'Skipping JS test because JS tests have been flaky on Travis.'
+    skip 'Skipping JS test because JS tests have been flaky on Travis.'
   end if ENV['SKIP_JS_SPEC']
 end
 

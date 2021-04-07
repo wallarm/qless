@@ -355,7 +355,7 @@ module Qless
     end
 
     it 'exposes when the next job will run' do
-      pending('This is implemented only in the python client')
+      skip('This is implemented only in the python client')
       queue.recur('Foo', {}, 60, jid: 'jid')
       nxt = client.jobs['jid'].next
       queue.pop

@@ -197,7 +197,7 @@ module Qless
       end
 
       it 'fails the job with an error containing the job backtrace' do
-        pending('I do not think this is actually the desired behavior')
+        skip('I do not think this is actually the desired behavior')
       end
     end
 
