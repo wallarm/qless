@@ -4,7 +4,7 @@ require 'qless/middleware/memory_usage_monitor'
 
 module Qless
   module Middleware
-    describe MemoryUsageMonitor do
+    describe MemoryUsageMonitor, :not_core do
       include_context "forking worker"
 
       mem_usage_from_other_technique = nil

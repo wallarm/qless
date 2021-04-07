@@ -6,7 +6,7 @@ require 'tempfile'
 
 require 'spec_helper'
 
-describe 'qless-stats', :integration do
+describe 'qless-stats', :integration, :not_core do
   let(:path) { './exe/qless-stats' }
 
   def run(*args)
