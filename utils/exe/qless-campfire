@@ -6,12 +6,16 @@ require 'qless'
 require 'tinder'
 require 'micro-optparse'
 
+REDIS_HOST = ENV.fetch('REDIS_HOST', 'localhost')
+REDIS_PORT = Integer(ENV.fetch('REDIS_PORT', '6379'))
+REDIS_DB = Integer(ENV.fetch('REDIS_DB', '0'))
+
 @options = Parser.new do |p|
   p.banner = 'This agent lets you get campfire notifications for the progress of tracked jobs'
   p.option :subdomain, 'campfire subdomain'    , :default => '', :value_satisfies => lambda { |subdomain| subdomain.is_a?(String) }
   p.option :token    , 'campfire token for bot', :default => '', :value_satisfies => lambda { |subdomain| subdomain.is_a?(String) }
   p.option :room     , 'campfire room to talk in (defaults to first room)', :default => ''
-  p.option :host     , 'host:port for your qless redis instance', :default => 'localhost:6379'
+  p.option :host     , 'host:port for your qless redis instance', :default => "#{REDIS_HOST}:#{REDIS_PORT}/#{REDIS_DB}"
   p.option :web      , 'host:port for your qless web ui', :default => 'localhost:5678'
 end.process!
 
@@ -52,7 +56,7 @@ end
   on.stalled   { |jid| event(jid) { |job| 'stalled'  } }
   on.track     { |jid| event(jid) { |job| 'is being tracked'   } }
   on.untrack   { |jid| event(jid) { |job| 'not longer tracked' } }
-  
+
   on.completed do |jid|
     event(jid) do |job|
       if job
@@ -66,7 +70,7 @@ end
       end
     end
   end
-  
+
   on.popped do |jid|
     event(jid) do |job|
       if job
@@ -76,7 +80,7 @@ end
       end
     end
   end
-  
+
   on.put do |jid|
     event(jid) do |job|
       if job
@@ -86,7 +90,7 @@ end
       end
     end
   end
-  
+
   on.failed do |jid|
     job = @client.jobs[jid]
     if job
@@ -96,9 +100,9 @@ end
       speak("#{jid} failed")
     end
   end
-  
+
   puts 'Listening...'
-  
+
   Signal.trap("INT") do
     puts 'Exiting'
     Process.exit(0)

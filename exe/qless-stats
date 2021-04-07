@@ -6,7 +6,11 @@ require 'thor'
 
 class Stats < Thor
 
-  class_option :redis, :default => 'redis://localhost:6379/0'
+  REDIS_HOST = ENV.fetch('REDIS_HOST', 'localhost')
+  REDIS_PORT = Integer(ENV.fetch('REDIS_PORT', '6379'))
+  REDIS_DB = Integer(ENV.fetch('REDIS_DB', '0'))
+
+  class_option :redis, :default => "redis://#{REDIS_HOST}:#{REDIS_PORT}/#{REDIS_DB}"
   class_option :interval, :type => :numeric, :default => 60,
     :desc => 'Interval (in seconds) between stats collections'
   class_option :count, :type => :numeric, :default => 0,
