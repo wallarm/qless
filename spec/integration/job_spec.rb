@@ -208,7 +208,7 @@ module Qless
         client.config['grace-period'] = 0
         client.config['heartbeat'] = 1
 
-        queue.put('JobClass', { redis: redis._client.id },
+        queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id },
                   retries: 0, jid: 'jid')
 
         drain_worker_queues(worker)
