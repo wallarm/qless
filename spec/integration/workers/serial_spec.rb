@@ -35,7 +35,7 @@ module Qless
       stub_const('JobClass', job_class)
 
       # Put in a single job
-      queue.put('JobClass', { redis: redis._client.id, key: key, word: 'hello' })
+      queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: 'hello' })
       expect do
         run_jobs(worker, 1) do
           expect(redis.brpop(key, timeout: 1)).to eq([key.to_s, 'hello'])
@@ -55,7 +55,7 @@ module Qless
       # Make jobs for each word
       words = %w{foo bar howdy}
       words.each do |word|
-        queue.put('JobClass', { redis: redis._client.id, key: key, word: word })
+        queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: word })
       end
 
       # Wait for the job to complete, and then kill the child process
@@ -110,7 +110,7 @@ module Qless
 
         # Put this job into the queue and then busy-wait for the job to be
         # running, time it out, then make sure it eventually completes
-        queue.put('JobClass', { redis: redis._client.id, key: key, word: :foo },
+        queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: :foo },
                   jid: 'jid')
         run_jobs(worker, 2) do
           expect(redis.brpop(key, timeout: 1)).to eq([key.to_s, 'foo'])
@@ -179,9 +179,9 @@ module Qless
         stub_const('JobClass', job_class)
 
         # Put this job into the queue and then have the worker lose its lock
-        queue.put('JobClass', { redis: redis._client.id, key: key, word: :foo },
+        queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: :foo },
                   priority: 10, jid: 'jid')
-        queue.put('JobClass', { redis: redis._client.id, key: key, word: :foo },
+        queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: :foo },
                   priority: 5, jid: 'other')
 
         run_jobs(worker, 1) do
@@ -220,7 +220,7 @@ module Qless
         stub_const('JobClass', job_class)
 
         # Put a job and run it, making sure it gets retried
-        queue.put('JobClass', { redis: redis._client.id, key: key, word: :foo },
+        queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: :foo },
                   jid: 'jid', retries: 10)
         run_jobs(worker, 1) do
           redis.brpop(key, timeout: 1).should eq([key.to_s, 'foo'])

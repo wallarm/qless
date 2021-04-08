@@ -60,7 +60,7 @@ module Qless
       # Make jobs for each word
       words = %w{foo bar howdy}
       words.each do |word|
-        queue.put('JobClass', { redis: redis._client.id, key: key, word: word })
+        queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: word })
       end
 
       # Wait for the job to complete, and then kill the child process
@@ -105,7 +105,7 @@ module Qless
       stub_const('JobClass', job_class)
 
       # Put a job and run it, making sure it finally succeeds
-      queue.put('JobClass', { redis: redis._client.id, key: key, word: :foo },
+      queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: :foo },
                 retries: 5)
       run_worker_concurrently_with(worker) do
         client.redis.brpop(key, timeout: 1).should eq([key.to_s, 'foo'])
@@ -129,7 +129,7 @@ module Qless
       stub_const('JobClass', job_class)
 
       # Put a job in and run it
-      queue.put('JobClass', { redis: redis._client.id, key: key, word: :foo })
+      queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: :foo })
       run_worker_concurrently_with(worker) do
         client.redis.brpop(key, timeout: 1).should eq([key.to_s, 'foo'])
       end
@@ -146,7 +146,7 @@ module Qless
 
       # Make jobs for each word
       3.times do
-        queue.put('JobClass', { redis: redis._client.id, key: key })
+        queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key })
       end
 
       # mixin module sends a message to a channel
