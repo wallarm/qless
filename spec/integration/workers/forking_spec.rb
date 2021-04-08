@@ -63,12 +63,16 @@ module Qless
         queue.put('JobClass', { redis: Qless.redis_underline_client(redis).id, key: key, word: word })
       end
 
+      worked = []
+
       # Wait for the job to complete, and then kill the child process
       run_worker_concurrently_with(worker) do
         words.each do |word|
-          client.redis.brpop(key, timeout: 1).should eq([key.to_s, word])
+          worked.push(client.redis.brpop(key, timeout: 1))
         end
       end
+
+      expect(worked).to match_array(words.map { |word| [key.to_s, word] })
     end
 
     it 'can drain its queues and exit' do
