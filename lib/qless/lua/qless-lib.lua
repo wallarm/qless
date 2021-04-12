@@ -2173,18 +2173,24 @@ function QlessQueue:invalidate_locks(now, count)
         self.locks.remove(jid)
         self.scheduled.remove(jid)
 
-        local group = 'failed-retries-' .. Qless.job(jid):data()['queue']
+        local job_data = Qless.job(jid):data()
+        local group = 'failed-retries-' .. job_data['queue']
         local job = Qless.job(jid)
         job:history(now, 'failed', {group = group})
         redis.call('hmset', QlessJob.ns .. jid, 'state', 'failed',
           'worker', '',
           'expires', '')
+
+        local message = 'Job exhausted retries in queue "' .. self.name .. '"'
+        if job_data['failure'] and job_data['failure']['message'] then
+          message = message .. '\n\n' .. job_data['failure']['message']
+        end
+
         -- If the failure has not already been set, then set it
         redis.call('hset', QlessJob.ns .. jid,
         'failure', cjson.encode({
           ['group']   = group,
-          ['message'] =
-            'Job exhausted retries in queue "' .. self.name .. '"',
+          ['message'] = message,
           ['when']    = now,
           ['worker']  = unpack(job:data('worker'))
         }))
