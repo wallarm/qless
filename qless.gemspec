@@ -35,7 +35,6 @@ language-specific extension will also remain up to date.
   s.require_paths = ['lib']
 
   s.add_dependency 'redis', ['>= 3.0.7']
-  s.add_dependency 'rusage', '>= 0.2.0'
   s.add_dependency 'sinatra', '>= 1.3'
   s.add_dependency 'statsd-ruby', '>= 1.3'
   s.add_dependency 'thin', '>= 1.6'
