@@ -1,0 +1,22 @@
+version: "2.1"
+services:
+  ruby:
+    image: ruby:2.7
+    depends_on:
+      - redis
+    environment:
+      - BUNDLE_PATH=/bundle/2.7
+      - RACK_ENV=test
+      - REDIS_HOST=redis
+      - SKIP_JS_SPEC=true
+    volumes:
+      - .:/usr/src/qless
+      - bundler-data:/bundle
+    working_dir: /usr/src/qless
+  redis:
+    image: redis:6
+
+volumes:
+  bundler-data:
+    external:
+      name: bundler_data
