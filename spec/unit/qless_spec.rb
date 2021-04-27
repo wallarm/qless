@@ -59,7 +59,7 @@ describe Qless do
     end
 
     it 'allows the redis connection to be passed directly in' do
-      redis_class.should_not_receive(:connect)
+      redis_class.should_not_receive(:new)
 
       client = Qless::Client.new(redis: redis)
       client.redis.should be(redis)

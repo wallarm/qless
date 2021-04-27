@@ -44,7 +44,7 @@ module Qless
 
           # the second job should increase mem growth but be the same pid.
           expect(job_records[1].pid).to eq(job_records[0].pid)
-          expect(job_records[1].before_mem).to be > job_records[0].before_mem
+          expect(job_records[1].before_mem).to be >= job_records[0].before_mem
 
           # the third job sould be a new process with cleared out memory
           expect(job_records[2].pid).not_to eq(job_records[0].pid)
