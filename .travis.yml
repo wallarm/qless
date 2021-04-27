@@ -1,8 +1,8 @@
 dist: trusty
 sudo: false
 bundler_args: --without extras
-before_script:
-  - bundle exec rake core:verify
+# before_script:
+#   - bundle exec rake core:verify
 branches:
   only:
     - master
