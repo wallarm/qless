@@ -35,11 +35,7 @@ module Qless
           client = instance_double('Redis::Client')
           client.stub(:reconnect) { events << :"reconnect_#{i}" }
 
-          if ::Redis::VERSION < '4'
-            instance_double('Redis', client: client)
-          else
-            instance_double('Redis', _client: client)
-          end
+          instance_double('Redis', _client: client)
         end
       end
 

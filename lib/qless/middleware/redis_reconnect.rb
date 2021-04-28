@@ -1,7 +1,5 @@
 # Encoding: utf-8
 
-require 'qless/redis_underline_client'
-
 module Qless
   module Middleware
     # A module for reconnecting to redis for each job
@@ -17,7 +15,7 @@ module Qless
 
           define_method :around_perform do |job|
             Array(block.call(job)).each do |redis|
-              Qless.redis_underline_client(redis).reconnect
+              redis._client.reconnect
             end
 
             super(job)

@@ -3,8 +3,6 @@ source "http://rubygems.org"
 # Specify your gem's dependencies in qless.gemspec
 gemspec
 
-gem 'redis', ENV['REDIS_GEM_VERSION'] if ENV['REDIS_GEM_VERSION']
-
 group :extras do
   gem 'debugger', :platform => :mri_19
 end

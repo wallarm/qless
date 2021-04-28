@@ -20,7 +20,6 @@ module Qless
   USING_LEGACY_REDIS_VERSION = ::Redis::VERSION.to_f < 3.0
 end
 
-require 'qless/redis_underline_client'
 require 'qless/version'
 require 'qless/config'
 require 'qless/queue'
@@ -31,8 +30,6 @@ require 'qless/failure_formatter'
 # The top level container for all things qless
 module Qless
   UnsupportedRedisVersionError = Class.new(Error)
-
-  extend RedisUnderlineClient
 
   def generate_jid
     SecureRandom.uuid.gsub('-', '')
