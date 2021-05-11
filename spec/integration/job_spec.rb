@@ -170,7 +170,7 @@ module Qless
       queue.put('Foo', {}, jid: 'c', depends: ['a'])
       expect(client.jobs['c'].dependencies).to eq(['a'])
       client.jobs['c'].depend('b')
-      expect(client.jobs['c'].dependencies).to eq(%w{a b})
+      expect(client.jobs['c'].dependencies).to match_array(%w{a b})
       client.jobs['c'].undepend('a')
       expect(client.jobs['c'].dependencies).to eq(['b'])
     end
@@ -355,7 +355,7 @@ module Qless
     end
 
     it 'exposes when the next job will run' do
-      pending('This is implemented only in the python client')
+      skip('This is implemented only in the python client')
       queue.recur('Foo', {}, 60, jid: 'jid')
       nxt = client.jobs['jid'].next
       queue.pop

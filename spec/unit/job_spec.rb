@@ -167,7 +167,7 @@ module Qless
             job.send(meth, *args)
           end.to raise_error(MyCustomError)
 
-          job.state_changed?.should be_false
+          job.state_changed?.should eq(false)
         end
 
         it 'triggers before and after callbacks' do

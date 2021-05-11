@@ -63,12 +63,16 @@ module Qless
         queue.put('JobClass', { redis: redis._client.id, key: key, word: word })
       end
 
+      worked = []
+
       # Wait for the job to complete, and then kill the child process
       run_worker_concurrently_with(worker) do
         words.each do |word|
-          client.redis.brpop(key, timeout: 1).should eq([key.to_s, word])
+          worked.push(client.redis.brpop(key, timeout: 1))
         end
       end
+
+      expect(worked).to match_array(words.map { |word| [key.to_s, word] })
     end
 
     it 'can drain its queues and exit' do
@@ -168,7 +172,7 @@ module Qless
 
     context 'when a job times out', :uses_threads do
       it 'fails the job with an error containing the job backtrace' do
-        pending('I do not think this is actually the desired behavior')
+        skip('I do not think this is actually the desired behavior')
       end
     end
   end
