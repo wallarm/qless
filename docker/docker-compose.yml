@@ -1,20 +1,22 @@
-version: "2.1"
+version: "3.7"
 services:
   ruby:
-    image: ruby:2.7
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
     depends_on:
       - redis
     environment:
-      - BUNDLE_PATH=/bundle/2.7
+      - BUNDLE_PATH=/bundle/3.1
       - RACK_ENV=test
       - REDIS_HOST=redis
       - SKIP_JS_SPEC=true
     volumes:
-      - .:/usr/src/qless
+      - ..:/app
       - bundler-data:/bundle
-    working_dir: /usr/src/qless
+
   redis:
-    image: redis:6
+    image: redis:7-alpine
 
 volumes:
   bundler-data:

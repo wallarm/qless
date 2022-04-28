@@ -2,20 +2,25 @@ version: "5.0"
 
 compose:
   files:
-    - ./docker-compose.yml
+    - docker/docker-compose.yml
+  project_name: qless
 
 interaction:
   ruby:
     service: ruby
-    command: /bin/bash
+    command: sh
 
   sh:
     service: ruby
-    command: /bin/bash
+    command: sh
 
   bundle:
     service: ruby
     command: bundle
+
+  clean:
+    service: ruby
+    command: rm -f Gemfile.lock
 
   rspec:
     service: ruby
@@ -23,4 +28,5 @@ interaction:
 
 provision:
   - docker volume create --name bundler_data
+  - dip clean
   - dip bundle install
