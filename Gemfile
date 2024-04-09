@@ -14,6 +14,7 @@ group :development do
   gem 'pry'
   gem 'pry-byebug', :platforms => [:ruby_20, :ruby_21]
   gem 'pry-stack_explorer'
+  gem 'redis', '>= 4', '< 5'
   gem 'rspec-fire'
   gem 'rubocop'
   gem 'simplecov'
